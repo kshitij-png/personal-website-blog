@@ -1,0 +1,84 @@
+---
+title: "CSS Custom Properties Explained"
+date: "2024-04-15"
+description: "How CSS variables work, why they beat preprocessor variables, and how to use them for theming."
+tags: ["css", "design"]
+---
+
+## What are CSS custom properties?
+
+CSS custom properties (also called CSS variables) let you store a value once and reuse it everywhere. They always start with `--`.
+
+```css
+:root {
+  --color-primary: #4f46e5;
+  --spacing-lg: 2rem;
+  --font-size-base: 1rem;
+}
+```
+
+You read them back with `var()`.
+
+```css
+button {
+  background-color: var(--color-primary);
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+```
+
+Change `--color-primary` in one place and every button updates instantly.
+
+## Why not just use Sass variables?
+
+Sass variables like `$primary: blue` are resolved at **build time** — they're compiled away and the browser never sees them. CSS custom properties live at **runtime**, which means:
+
+- JavaScript can read and write them
+- They respond to media queries
+- They cascade and inherit like normal CSS
+
+```js
+// Read a CSS variable at runtime
+const primary = getComputedStyle(document.documentElement)
+  .getPropertyValue('--color-primary');
+
+// Write one
+document.documentElement.style.setProperty('--color-primary', '#e11d48');
+```
+
+## Dark mode with custom properties
+
+This is where they shine. Define two sets of values — one for light, one for dark.
+
+```css
+:root {
+  --background: #ffffff;
+  --text: #111827;
+}
+
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --text: #f9fafb;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+```
+
+Toggle the theme by setting one attribute on `<html>`. Every element that uses these variables flips automatically — no JavaScript needs to know about individual elements.
+
+```js
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+## Fallback values
+
+`var()` accepts a fallback as the second argument. If the variable is not defined, the fallback is used.
+
+```css
+color: var(--text-color, black);
+```
+
+Useful when building components that might be dropped into projects that don't define your variables.

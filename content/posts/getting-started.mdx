@@ -1,0 +1,79 @@
+---
+title: "Getting Started with Next.js 14"
+date: "2024-05-01"
+description: "A practical intro to the App Router, layouts, and pages in Next.js 14."
+tags: ["next.js", "react"]
+---
+
+## What is the App Router?
+
+The App Router is Next.js's way of turning folders into routes. Every folder inside
+`app/` becomes a URL path, and every `page.tsx` inside that folder is the page that renders.
+
+```
+app/
+  page.tsx          → /
+  blog/
+    page.tsx        → /blog
+    [slug]/
+      page.tsx      → /blog/anything
+```
+
+## Creating a page
+
+Every page is just a React component that you export as default.
+
+```tsx
+export default function AboutPage() {
+  return (
+    <main>
+      <h1>About me</h1>
+      <p>I build things for the web.</p>
+    </main>
+  );
+}
+```
+
+Save that as `app/about/page.tsx` and Next.js automatically serves it at `/about`. No config needed.
+
+## Shared layouts
+
+If you want a header and footer on every page, you put them in `layout.tsx` — not in each page individually.
+
+```tsx
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+```
+
+`children` is whatever the current page renders. The layout wraps it automatically.
+
+## Fetching data
+
+Because pages are server components by default, you can `async/await` directly inside them — no `useEffect` needed.
+
+```tsx
+async function getPosts() {
+  const res = await fetch('https://api.example.com/posts');
+  return res.json();
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts();
+  return (
+    <ul>
+      {posts.map(post => <li key={post.id}>{post.title}</li>)}
+    </ul>
+  );
+}
+```
+
+The data fetching happens on the server before the HTML is sent to the browser.

@@ -1,0 +1,74 @@
+---
+title: "How Web Routing Actually Works"
+date: "2024-03-20"
+description: "From typing a URL to seeing a page — what happens in between, explained plainly."
+tags: ["web", "fundamentals"]
+---
+
+## What routing means
+
+When you type `https://example.com/blog` into a browser, the `/blog` part is the **path**. Routing is the system that decides what to show you based on that path.
+
+In the old days, every path mapped directly to a file on a server.
+
+```bash
+/var/www/html/
+  index.html      → example.com/
+  blog.html       → example.com/blog
+  about.html      → example.com/about
+```
+
+Request `/blog`, get `blog.html`. Simple.
+
+## The problem with file-based routing
+
+Once you need dynamic pages — like `/blog/my-post-title` — you can't create a file for every possible URL. You need a router that can match patterns.
+
+```js
+// Express.js (Node.js) — pattern matching
+app.get('/blog/:slug', (req, res) => {
+  const { slug } = req.params; // "my-post-title"
+  const post = getPostBySlug(slug);
+  res.send(renderPost(post));
+});
+```
+
+The `:slug` part is a **dynamic segment** — it matches anything and hands you the value.
+
+## How Next.js App Router handles this
+
+Next.js brings file-based routing back, but with folder names that support patterns.
+
+A folder wrapped in square brackets is a dynamic segment:
+
+```
+app/
+  blog/
+    [slug]/
+      page.tsx    → matches /blog/anything
+```
+
+Inside `page.tsx`, Next.js gives you the matched value:
+
+```tsx
+export default function PostPage({ params }: { params: { slug: string } }) {
+  // params.slug is whatever was in the URL
+  // /blog/hello-world → params.slug === "hello-world"
+  return <h1>{params.slug}</h1>;
+}
+```
+
+## Client-side vs server-side routing
+
+**Server-side routing** — every navigation hits the server, which sends back a full HTML page. Slower but simpler.
+
+**Client-side routing** — after the first load, JavaScript intercepts link clicks and swaps out only the content that changed. Feels instant because no full page reload happens.
+
+Next.js does both. The first visit is server-rendered (fast initial load, good for SEO). After that, the `<Link>` component takes over and navigates client-side.
+
+```tsx
+import Link from 'next/link';
+
+// This looks like a normal anchor tag but navigates without a full reload
+<Link href="/blog/my-post">Read post</Link>
+```
