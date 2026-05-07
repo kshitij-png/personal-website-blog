@@ -56,7 +56,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 backdrop-blur-sm border-b border-border" style={{ backgroundColor: 'var(--header-bg)' }}>
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-primary tracking-tight transition-colors">
-          MyBrand
+          Vector
         </Link>
 
         {/* Desktop nav */}

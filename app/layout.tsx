@@ -16,8 +16,23 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "MyBrand",
-  description: "A modern personal brand website",
+  metadataBase: new URL('https://personal-website-blog2.vercel.app'),
+  title: {
+    default: "Vector",
+    template: "%s | Vector",
+  },
+  description: "A clean, modern space for ideas, stories, and connections.",
+  openGraph: {
+    siteName: "Vector",
+    title: "Vector",
+    description: "A clean, modern space for ideas, stories, and connections.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vector",
+    description: "A clean, modern space for ideas, stories, and connections.",
+  },
 };
 
 export default function RootLayout({

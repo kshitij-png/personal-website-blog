@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-6 py-16">
       <h1 className="text-4xl md:text-6xl font-bold text-foreground tracking-tight">
-        Welcome to <span className="text-primary">MyBrand</span>
+        Welcome to <span className="text-primary">Vector</span>
       </h1>
       <p className="text-lg md:text-xl text-muted max-w-2xl">
         A clean, modern space for ideas, stories, and connections.
