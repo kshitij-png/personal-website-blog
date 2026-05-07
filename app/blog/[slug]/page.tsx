@@ -4,6 +4,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import type { PluggableList } from 'unified';
 
 type Props = { params: { slug: string } };
 
@@ -61,7 +62,7 @@ export default async function PostPage({ params }: Props) {
           source={post.content}
           options={{
             mdxOptions: {
-              rehypePlugins: [[rehypePrettyCode, { theme: 'github-dark' }] as any],
+              rehypePlugins: [[rehypePrettyCode, { theme: 'github-dark' }]] as PluggableList,
             },
           }}
         />
